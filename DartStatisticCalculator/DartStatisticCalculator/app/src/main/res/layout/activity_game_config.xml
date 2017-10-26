@@ -15,7 +15,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_gravity="center_horizontal|top">
+        android:layout_gravity="center_horizontal|top"
+        android:background="#aaaaaa">
 
         <Button
             android:layout_width="wrap_content"
@@ -47,47 +48,19 @@
         android:layout_marginTop="60dp">
 
         <RadioGroup
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="left|center_vertical">
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginTop="50dp">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="110dp">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Best Of"
-                    android:id="@+id/rbtnBestOf"
-                    android:layout_gravity="top|left|center_horizontal"
-                    android:checked="false"
-                    android:layout_marginLeft="50dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="3"
-                    android:id="@+id/textView2"
-                    android:layout_gravity="top|center_horizontal"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginLeft="10dp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-"
-                    android:id="@+id/btnReduce" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+"
-                    android:id="@+id/btnRaise" />
-            </LinearLayout>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Best Of"
+                android:id="@+id/rbtnBestOf"
+                android:layout_gravity="top|left|center_horizontal"
+                android:checked="false"
+                android:layout_marginLeft="50dp" />
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -96,10 +69,44 @@
                 android:id="@+id/rbtnOpenEnd"
                 android:layout_gravity="top|left|center_horizontal"
                 android:layout_marginLeft="50dp"
-                android:checked="false"
+                android:checked="true"
                 android:layout_marginTop="20dp" />
 
         </RadioGroup>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="236dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="71dp"
+            android:gravity="right"
+            android:layout_marginLeft="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="3"
+                android:id="@+id/txtBestOf"
+                android:layout_gravity="top|center_horizontal"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/btnReduce"
+                android:enabled="false" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/btnRaise"
+                android:enabled="false" />
+        </LinearLayout>
     </FrameLayout>
 
 </FrameLayout>

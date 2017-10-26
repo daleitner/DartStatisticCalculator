@@ -1,12 +1,16 @@
 package mcleite.dartstatisticcalculator;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -57,13 +61,73 @@ public class GameConfigActivity extends AppCompatActivity {
         }
     };
 
+    private GameConfigController _controller;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_game_config);
+        _controller = new GameConfigController();
 
         mVisible = true;
+
+        final Button btnBack = (Button) findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(GameConfigActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        final Button btnStart = (Button) findViewById(R.id.btnStart);
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(GameConfigActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        final Button btnRaise = (Button) findViewById(R.id.btnRaise);
+        btnRaise.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                GameConfigActivity.this._controller.RaiseBestOf();
+                final TextView txtBestOf = (TextView) findViewById(R.id.txtBestOf);
+                CharSequence str = Integer.toString(GameConfigActivity.this._controller.GetBestOf());
+                txtBestOf.setText(str);
+            }
+        });
+
+        final Button btnReduce = (Button) findViewById(R.id.btnReduce);
+        btnReduce.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                GameConfigActivity.this._controller.ReduceBestOf();
+                final TextView txtBestOf = (TextView) findViewById(R.id.txtBestOf);
+                CharSequence str = Integer.toString(GameConfigActivity.this._controller.GetBestOf());
+                txtBestOf.setText(str);
+            }
+        });
+
+        final RadioButton rbtnBestOf = (RadioButton) findViewById(R.id.rbtnBestOf);
+        rbtnBestOf.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                GameConfigActivity.this._controller.SetIsBestOf(true);
+                final Button btnReduce = (Button) findViewById(R.id.btnReduce);
+                final Button btnRaise = (Button) findViewById(R.id.btnRaise);
+                btnRaise.setEnabled(true);
+                btnReduce.setEnabled(true);
+            }
+        });
+
+        final RadioButton rbtnOpenEnd = (RadioButton) findViewById(R.id.rbtnOpenEnd);
+        rbtnOpenEnd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                GameConfigActivity.this._controller.SetIsBestOf(false);
+                final Button btnReduce = (Button) findViewById(R.id.btnReduce);
+                final Button btnRaise = (Button) findViewById(R.id.btnRaise);
+                btnRaise.setEnabled(false);
+                btnReduce.setEnabled(false);
+            }
+        });
     }
 
     @Override
