@@ -19,7 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameConfigActivity" />
+        <activity
+            android:name=".GameConfigActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_game_config"
+            android:theme="@style/FullscreenTheme" />
     </application>
 
 </manifest>
