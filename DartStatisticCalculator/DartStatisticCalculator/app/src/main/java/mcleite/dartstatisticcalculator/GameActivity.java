@@ -1,22 +1,19 @@
 package mcleite.dartstatisticcalculator;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class GameConfigActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -40,9 +37,9 @@ public class GameConfigActivity extends AppCompatActivity {
         @Override
         public void run() {
             // Delayed removal of status and navigation bar
-
         }
     };
+
     private final Runnable mShowPart2Runnable = new Runnable() {
         @Override
         public void run() {
@@ -61,73 +58,20 @@ public class GameConfigActivity extends AppCompatActivity {
         }
     };
 
-    private GameConfigController _controller;
+    private Round round1;
+    private Round round2;
+    private Round round3;
+    private Round round4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_game_config);
-        _controller = new GameConfigController();
+        setContentView(R.layout.activity_game);
 
         mVisible = true;
 
-        final Button btnBack = (Button) findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(GameConfigActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        final Button btnStart = (Button) findViewById(R.id.btnStart);
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(GameConfigActivity.this, GameActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        final Button btnRaise = (Button) findViewById(R.id.btnRaise);
-        btnRaise.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                GameConfigActivity.this._controller.RaiseBestOf();
-                final TextView txtBestOf = (TextView) findViewById(R.id.txtBestOf);
-                CharSequence str = Integer.toString(GameConfigActivity.this._controller.GetBestOf());
-                txtBestOf.setText(str);
-            }
-        });
-
-        final Button btnReduce = (Button) findViewById(R.id.btnReduce);
-        btnReduce.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                GameConfigActivity.this._controller.ReduceBestOf();
-                final TextView txtBestOf = (TextView) findViewById(R.id.txtBestOf);
-                CharSequence str = Integer.toString(GameConfigActivity.this._controller.GetBestOf());
-                txtBestOf.setText(str);
-            }
-        });
-
-        final RadioButton rbtnBestOf = (RadioButton) findViewById(R.id.rbtnBestOf);
-        rbtnBestOf.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                GameConfigActivity.this._controller.SetIsBestOf(true);
-                final Button btnReduce = (Button) findViewById(R.id.btnReduce);
-                final Button btnRaise = (Button) findViewById(R.id.btnRaise);
-                btnRaise.setEnabled(true);
-                btnReduce.setEnabled(true);
-            }
-        });
-
-        final RadioButton rbtnOpenEnd = (RadioButton) findViewById(R.id.rbtnOpenEnd);
-        rbtnOpenEnd.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                GameConfigActivity.this._controller.SetIsBestOf(false);
-                final Button btnReduce = (Button) findViewById(R.id.btnReduce);
-                final Button btnRaise = (Button) findViewById(R.id.btnRaise);
-                btnRaise.setEnabled(false);
-                btnReduce.setEnabled(false);
-            }
-        });
+        InitializeRounds();
+        UpdateRounds();
     }
 
     @Override
@@ -138,6 +82,30 @@ public class GameConfigActivity extends AppCompatActivity {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100);
+    }
+
+    private void InitializeRounds() {
+        final TextView scores1 = (TextView) findViewById(R.id.txtScoresOne);
+        final TextView scores2 = (TextView) findViewById(R.id.txtScoresTwo);
+        final TextView scores3 = (TextView) findViewById(R.id.txtScoresThree);
+        final TextView scores4 = (TextView) findViewById(R.id.txtScoresFour);
+        final TextView left1 = (TextView) findViewById(R.id.txtLeftOne);
+        final TextView left2 = (TextView) findViewById(R.id.txtLeftTwo);
+        final TextView left3 = (TextView) findViewById(R.id.txtLeftThree);
+        final TextView left4 = (TextView) findViewById(R.id.txtLeftFour);
+        final TextView dart1 = (TextView) findViewById(R.id.txtDartsOne);
+        final TextView dart2 = (TextView) findViewById(R.id.txtDartsTwo);
+        final TextView dart3 = (TextView) findViewById(R.id.txtDartsThree);
+        final TextView dart4 = (TextView) findViewById(R.id.txtDartsFour);
+
+        round1 = new Round(scores1, left1, dart1);
+        round2 = new Round(scores2, left2, dart2);
+        round3 = new Round(scores3, left3, dart3);
+        round4 = new Round(scores4, left4, dart4);
+    }
+
+    private void UpdateRounds() {
+
     }
 
     private void toggle() {
