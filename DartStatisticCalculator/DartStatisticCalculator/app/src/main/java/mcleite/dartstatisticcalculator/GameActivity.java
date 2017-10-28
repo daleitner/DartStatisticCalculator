@@ -5,9 +5,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -58,10 +60,10 @@ public class GameActivity extends AppCompatActivity {
         }
     };
 
-    private Round round1;
-    private Round round2;
-    private Round round3;
-    private Round round4;
+    private ArrayList<RoundContainer> roundContainer;
+    private GameController controller;
+    private Button btnDelete;
+    private Button btnEnter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +71,31 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         mVisible = true;
-
+        controller = new GameController();
         InitializeRounds();
+        InitializeNumberButtons();
+
+        btnDelete = (Button) findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int actualPosition = controller.getActualPosition();
+                String actualValue = controller.DeleteLastInput();
+                roundContainer.get(actualPosition).updateScores(actualValue);
+                UpdateButtons();
+            }
+        });
+
+        btnEnter = (Button) findViewById(R.id.btnEnter);
+        btnEnter.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                controller.enterRound();
+                UpdateRounds();
+                UpdateButtons();
+            }
+        });
+
         UpdateRounds();
+        UpdateButtons();
     }
 
     @Override
@@ -82,6 +106,22 @@ public class GameActivity extends AppCompatActivity {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100);
+    }
+
+    private void UpdateRounds() {
+        int actualRound = controller.getActualRound();
+        for(int i = 0; i<roundContainer.size(); i++) {
+            roundContainer.get(i).setRound(controller.getRound(i+1), i == 3 || (actualRound<4 && i >= actualRound));
+        }
+        if(actualRound<=3) {
+            final TextView scores1 = (TextView) findViewById(R.id.txtScoresOne);
+            scores1.setText("   ");
+        }
+    }
+
+    private void UpdateButtons() {
+        btnDelete.setEnabled(controller.canDelete());
+        btnEnter.setEnabled(controller.canEnter());
     }
 
     private void InitializeRounds() {
@@ -97,15 +137,35 @@ public class GameActivity extends AppCompatActivity {
         final TextView dart2 = (TextView) findViewById(R.id.txtDartsTwo);
         final TextView dart3 = (TextView) findViewById(R.id.txtDartsThree);
         final TextView dart4 = (TextView) findViewById(R.id.txtDartsFour);
-
-        round1 = new Round(scores1, left1, dart1);
-        round2 = new Round(scores2, left2, dart2);
-        round3 = new Round(scores3, left3, dart3);
-        round4 = new Round(scores4, left4, dart4);
+        roundContainer = new ArrayList<>();
+        roundContainer.add(new RoundContainer(scores1, left1, dart1));
+        roundContainer.add(new RoundContainer(scores2, left2, dart2));
+        roundContainer.add(new RoundContainer(scores3, left3, dart3));
+        roundContainer.add(new RoundContainer(scores4, left4, dart4));
     }
 
-    private void UpdateRounds() {
-
+    private void InitializeNumberButtons() {
+        final ArrayList<Button> numberButtons = new ArrayList<>();
+        numberButtons.add((Button) findViewById(R.id.btnZero));
+        numberButtons.add((Button) findViewById(R.id.btnOne));
+        numberButtons.add((Button) findViewById(R.id.btnTwo));
+        numberButtons.add((Button) findViewById(R.id.btnThree));
+        numberButtons.add((Button) findViewById(R.id.btnFour));
+        numberButtons.add((Button) findViewById(R.id.btnFive));
+        numberButtons.add((Button) findViewById(R.id.btnSix));
+        numberButtons.add((Button) findViewById(R.id.btnSeven));
+        numberButtons.add((Button) findViewById(R.id.btnEight));
+        numberButtons.add((Button) findViewById(R.id.btnNine));
+        for(int i = 0; i<numberButtons.size(); i++) {
+            numberButtons.get(i).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int actualPosition = controller.getActualPosition();
+                    String actualValue = controller.UserClicked(((Button) v).getText());
+                    roundContainer.get(actualPosition).updateScores(actualValue);
+                    UpdateButtons();
+                }
+            });
+        }
     }
 
     private void toggle() {
