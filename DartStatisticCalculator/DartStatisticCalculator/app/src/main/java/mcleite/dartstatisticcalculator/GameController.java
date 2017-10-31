@@ -73,4 +73,8 @@ public class GameController {
         _actualRound++;
         _actualInput = "";
     }
+
+    public boolean isLegFinished() {
+        return _rounds.get(_actualRound-1).getLeft() == 0;
+    }
 }

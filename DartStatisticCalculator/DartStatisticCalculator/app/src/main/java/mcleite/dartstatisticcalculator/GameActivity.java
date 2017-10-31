@@ -1,12 +1,15 @@
 package mcleite.dartstatisticcalculator;
 
 import android.annotation.SuppressLint;
+import android.opengl.Visibility;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -64,6 +67,8 @@ public class GameActivity extends AppCompatActivity {
     private GameController controller;
     private Button btnDelete;
     private Button btnEnter;
+    private FrameLayout checkLayout;
+    private GridLayout numberLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +79,9 @@ public class GameActivity extends AppCompatActivity {
         controller = new GameController();
         InitializeRounds();
         InitializeNumberButtons();
+
+        checkLayout = (FrameLayout) findViewById(R.id.layoutCheck);
+        numberLayout = (GridLayout) findViewById(R.id.layoutNumbers);
 
         btnDelete = (Button) findViewById(R.id.btnDelete);
         btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +99,9 @@ public class GameActivity extends AppCompatActivity {
                 controller.enterRound();
                 UpdateRounds();
                 UpdateButtons();
+                if(controller.isLegFinished()) {
+                    ShowCheckLayout();
+                }
             }
         });
 
@@ -106,6 +117,11 @@ public class GameActivity extends AppCompatActivity {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100);
+    }
+
+    private void ShowCheckLayout() {
+        checkLayout.setVisibility(View.VISIBLE);
+        numberLayout.setVisibility(View.GONE);
     }
 
     private void UpdateRounds() {
