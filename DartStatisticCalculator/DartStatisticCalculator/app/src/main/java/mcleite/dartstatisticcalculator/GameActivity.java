@@ -79,6 +79,7 @@ public class GameActivity extends AppCompatActivity {
         controller = new GameController();
         InitializeRounds();
         InitializeNumberButtons();
+        InitializeCheckButtons();
 
         checkLayout = (FrameLayout) findViewById(R.id.layoutCheck);
         numberLayout = (GridLayout) findViewById(R.id.layoutNumbers);
@@ -101,6 +102,8 @@ public class GameActivity extends AppCompatActivity {
                 UpdateButtons();
                 if(controller.isLegFinished()) {
                     ShowCheckLayout();
+                } else if(controller.couldHaveHadCheckDarts()) {
+                    ShowCheckDartsLayout();
                 }
             }
         });
@@ -122,7 +125,22 @@ public class GameActivity extends AppCompatActivity {
     private void ShowCheckLayout() {
         checkLayout.setVisibility(View.VISIBLE);
         numberLayout.setVisibility(View.GONE);
+        findViewById(R.id.btnCheckZero).setEnabled(false);
+        ((TextView)findViewById(R.id.txtMessage)).setText("How many darts did you use for check?");
     }
+
+    private void ShowNumberLayout() {
+        checkLayout.setVisibility(View.GONE);
+        numberLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void ShowCheckDartsLayout() {
+        checkLayout.setVisibility(View.VISIBLE);
+        numberLayout.setVisibility(View.GONE);
+        findViewById(R.id.btnCheckZero).setEnabled(true);
+        ((TextView)findViewById(R.id.txtMessage)).setText("How many darts did you throw to double?");
+    }
+
 
     private void UpdateRounds() {
         int actualRound = controller.getActualRound();
@@ -179,6 +197,28 @@ public class GameActivity extends AppCompatActivity {
                     String actualValue = controller.UserClicked(((Button) v).getText());
                     roundContainer.get(actualPosition).updateScores(actualValue);
                     UpdateButtons();
+                }
+            });
+        }
+    }
+
+    private void InitializeCheckButtons() {
+        final ArrayList<Button> checkButtons = new ArrayList<>();
+        checkButtons.add((Button) findViewById(R.id.btnCheckZero));
+        checkButtons.add((Button) findViewById(R.id.btnCheckOne));
+        checkButtons.add((Button) findViewById(R.id.btnCheckTwo));
+        checkButtons.add((Button) findViewById(R.id.btnCheckThree));
+        for(int i= 0; i<checkButtons.size(); i++) {
+            checkButtons.get(i).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                   controller.UserClickedCheck(((Button) v).getText());
+                   if(findViewById(R.id.btnCheckZero).isEnabled() == true) {
+                       ShowNumberLayout();
+                       UpdateRounds();
+                       UpdateButtons();
+                   } else {
+                       ShowCheckDartsLayout();
+                   }
                 }
             });
         }

@@ -10,13 +10,21 @@ public class GameController {
     private int _actualRound;
     private String _actualInput = "";
     private List<Round> _rounds;
+    private GameDataContainer data;
+    private boolean gotCheckDarts;
+    private int darts;
+    private int checkDarts;
     public GameController() {
+        data = new GameDataContainer();
         _actualRound = 1;
+        gotCheckDarts = false;
         _rounds = new ArrayList<>();
         _rounds.add(new Round(0, 501, 0));
         _rounds.add(new Round(0, 0, 3));
         _rounds.add(new Round(0, 0, 6));
         _rounds.add(new Round(0, 0, 9));
+        darts = 0;
+        checkDarts = 0;
     }
 
     public Round getRound(int position) {
@@ -76,5 +84,34 @@ public class GameController {
 
     public boolean isLegFinished() {
         return _rounds.get(_actualRound-1).getLeft() == 0;
+    }
+
+    public void UserClickedCheck(CharSequence text) {
+        if(isLegFinished() && !gotCheckDarts) {
+            darts = Integer.parseInt(text.toString());
+            darts += (_rounds.size()-1)*3;
+            gotCheckDarts = true;
+        } else {
+            checkDarts += Integer.parseInt(text.toString());
+            if(isLegFinished())
+                finishLeg();
+        }
+    }
+
+    private void finishLeg() {
+        data.AddLeg(501-_rounds.get(_actualRound-1).getLeft(), darts, checkDarts);
+        _rounds = new ArrayList<>();
+        _rounds.add(new Round(0, 501, 0));
+        _rounds.add(new Round(0, 0, 3));
+        _rounds.add(new Round(0, 0, 6));
+        _rounds.add(new Round(0, 0, 9));
+        _actualRound = 1;
+        gotCheckDarts = false;
+        darts = 0;
+        checkDarts = 0;
+    }
+
+    public boolean couldHaveHadCheckDarts() {
+        return false;
     }
 }
